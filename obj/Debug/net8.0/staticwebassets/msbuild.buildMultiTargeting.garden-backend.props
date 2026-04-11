@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\garden-backend.props" />
-</Project>
