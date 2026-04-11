@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "vrEyxEMoav91RBGLGwq9C06FfyFSINfYlD01nUtWmkI=",
+  "Source": "garden-backend",
+  "BasePath": "_content/garden-backend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
