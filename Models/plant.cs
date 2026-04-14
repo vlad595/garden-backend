@@ -33,6 +33,13 @@ namespace Models
 
     public class BerryBush : Plant
     {
+        public BerryBush(string name, string species, DateTime plantedAt, bool trellisNeeds)
+        {
+            this.Name = name;
+            this.Species = species;
+            this.PlantedAt = plantedAt;
+            this.TrellisNeeds = trellisNeeds;
+        }
         public bool TrellisNeeds {get; set;}
     }
 
