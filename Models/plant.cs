@@ -1,4 +1,5 @@
 using System;
+using DTO;
 
 namespace Models
 {
@@ -6,7 +7,7 @@ namespace Models
     {
         public string Name { get; set; }
         public string Species { get; set; }
-        public int age {get; set;}
+        public int Age {get; set;}
         public PlantStatus Status { get; set; }
         public DateTime PlantedAt { get; set; }
         public List<Harvest> harvests { get; set; } = new List<Harvest>();
@@ -14,6 +15,19 @@ namespace Models
 
     public class FruitTree : Plant
     {
+
+        public FruitTree()
+        {
+            
+        }
+
+        public FruitTree(string name, string species, DateTime plantedAt, double height)
+        {
+            this.Name = name;
+            this.Species = species;
+            this.PlantedAt = plantedAt;
+            this.Height = height;
+        }
         public double Height { get; set; }
     }
 
