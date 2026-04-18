@@ -24,7 +24,14 @@ namespace Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BerryBush>>> GetAllBerryBushes()
         {
-            var berryBushes = await _db.BerryBushes.ToListAsync();
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized("User Id is not correct");
+            }
+
+            var berryBushes = await _db.BerryBushes.Where(bush => bush.UserId == userId).ToListAsync();
             return Ok(berryBushes);
         }
 
@@ -52,7 +59,20 @@ namespace Controllers
         [HttpDelete]
         public async Task<ActionResult<BerryBush>> DeleteBerryBush(int Id)
         {
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized("User Id is not correct");
+            }
+
             BerryBush bush = _db.BerryBushes.Find(Id);
+
+            if (userId != bush.UserId)
+            {
+                return BadRequest("Not acceptable");
+            }
+            
             _db.BerryBushes.Remove(bush);
             await _db.SaveChangesAsync();
             return Ok(bush);

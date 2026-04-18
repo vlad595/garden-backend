@@ -56,7 +56,22 @@ namespace Controllers
         [HttpDelete]
         public async Task<ActionResult<FruitTree>> DeleteFruitTree(int Id)
         {
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized("User Id is not correct");
+            }
+
+            User user = _db.Users.FirstOrDefault(u => u.Id == userId);
+
             FruitTree tree = _db.FruitTrees.Find(Id);
+
+            if (user.Id != tree.UserId)
+            {
+                return BadRequest("Not your tree");
+            }
+
             _db.FruitTrees.Remove(tree);
             await _db.SaveChangesAsync();
             return Ok(tree);
