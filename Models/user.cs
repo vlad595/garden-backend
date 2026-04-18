@@ -11,6 +11,14 @@ namespace Models
         public UsersRoles Role {get;set;} = 0;
 
         public List<Plant> Plants {get;set;} = new List<Plant>();
+
+        public User(string Name, string Surname, string Email, string PasswordHash)
+        {
+            this.Name = Name;
+            this.Surname = Surname;
+            this.Email = Email;
+            this.PasswordHash = PasswordHash;
+        }
     }
 
     public enum UsersRoles

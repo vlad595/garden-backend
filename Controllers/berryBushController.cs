@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using DTO;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class BerryBushController : ControllerBase
     {
@@ -38,7 +41,9 @@ namespace Controllers
         [HttpPost]
         public async Task<ActionResult<BerryBush>> PostBerryBush(BerryBushCreation berryBush)
         {
-            BerryBush fullBush = new BerryBush(berryBush.Name, berryBush.Species, berryBush.PlantedAt, berryBush.TrellisNeeds);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            BerryBush fullBush = new BerryBush(berryBush.Name, berryBush.Species, berryBush.PlantedAt, berryBush.TrellisNeeds, Convert.ToInt32(userId));
             _db.BerryBushes.Add(fullBush);
             await _db.SaveChangesAsync();
             return Ok(fullBush);
