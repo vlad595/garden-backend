@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using DTO;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class FruitTreeController : ControllerBase
     {
@@ -20,7 +23,14 @@ namespace Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FruitTree>>> GetAllPlants()
         {
-            var fruitTrees = await _db.FruitTrees.ToListAsync();
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized("User Id is not correct");
+            }
+
+            var fruitTrees = await _db.FruitTrees.Where(t => t.UserId == userId).ToListAsync();
             return Ok(fruitTrees);
         }
 
@@ -35,7 +45,9 @@ namespace Controllers
         [HttpPost]
         public async Task<ActionResult<FruitTree>> AddFruitTree(FruitTreeCreation tree)
         {
-            FruitTree fullTree = new FruitTree(tree.Name, tree.Species, tree.PlantedAt, tree.Height);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            FruitTree fullTree = new FruitTree(tree.Name, tree.Species, tree.PlantedAt, tree.Height, Convert.ToInt32(userId));
             _db.FruitTrees.Add(fullTree);
             await _db.SaveChangesAsync();
             return Ok(fullTree);
@@ -44,7 +56,22 @@ namespace Controllers
         [HttpDelete]
         public async Task<ActionResult<FruitTree>> DeleteFruitTree(int Id)
         {
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized("User Id is not correct");
+            }
+
+            User user = _db.Users.FirstOrDefault(u => u.Id == userId);
+
             FruitTree tree = _db.FruitTrees.Find(Id);
+
+            if (user.Id != tree.UserId)
+            {
+                return BadRequest("Not your tree");
+            }
+
             _db.FruitTrees.Remove(tree);
             await _db.SaveChangesAsync();
             return Ok(tree);

@@ -3,6 +3,7 @@ using System;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace garden_backend.Migrations
 {
     [DbContext(typeof(Db))]
-    partial class DbModelSnapshot : ModelSnapshot
+    [Migration("20260414190348_InitBase")]
+    partial class InitBase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.26");
@@ -109,51 +112,13 @@ namespace garden_backend.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Plants");
 
                     b.HasDiscriminator().HasValue("Plant");
 
                     b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Models.Fertilizer", b =>
@@ -207,7 +172,7 @@ namespace garden_backend.Migrations
             modelBuilder.Entity("Models.Harvest", b =>
                 {
                     b.HasOne("Models.Plant", "Plant")
-                        .WithMany("Harvests")
+                        .WithMany("harvests")
                         .HasForeignKey("PlantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -217,23 +182,7 @@ namespace garden_backend.Migrations
 
             modelBuilder.Entity("Models.Plant", b =>
                 {
-                    b.HasOne("Models.User", "User")
-                        .WithMany("Plants")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Models.Plant", b =>
-                {
-                    b.Navigation("Harvests");
-                });
-
-            modelBuilder.Entity("Models.User", b =>
-                {
-                    b.Navigation("Plants");
+                    b.Navigation("harvests");
                 });
 #pragma warning restore 612, 618
         }
