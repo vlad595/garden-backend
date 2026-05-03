@@ -21,6 +21,20 @@ namespace Controllers
             _db = db;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<HarvestResponse>>> GetAllHarvests()
+        {
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized("User Id is not correct");
+            }
+
+            var harvestList = await _db.Harvests.ToListAsync();
+            return Ok(harvestList);
+        }
+
         [HttpGet("{plantId}")]
         public async Task<ActionResult<IEnumerable<HarvestResponse>>> GetAllHarvestsByPlantId([FromRoute]int plantId)
         {
