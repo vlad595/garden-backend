@@ -50,7 +50,7 @@ namespace Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            BerryBush fullBush = new BerryBush(berryBush.Name, berryBush.Species, berryBush.PlantedAt, berryBush.TrellisNeeds, Convert.ToInt32(userId));
+            BerryBush fullBush = new BerryBush(berryBush.Name, berryBush.Species, berryBush.PlantedAt, berryBush.TrellisNeeds, Convert.ToInt32(userId), berryBush.Status);
             _db.BerryBushes.Add(fullBush);
             await _db.SaveChangesAsync();
             return Ok(fullBush);

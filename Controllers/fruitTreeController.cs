@@ -47,7 +47,7 @@ namespace Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            FruitTree fullTree = new FruitTree(tree.Name, tree.Species, tree.PlantedAt, tree.Height, Convert.ToInt32(userId));
+            FruitTree fullTree = new FruitTree(tree.Name, tree.Species, tree.PlantedAt, tree.Height, Convert.ToInt32(userId), tree.Status);
             _db.FruitTrees.Add(fullTree);
             await _db.SaveChangesAsync();
             return Ok(fullTree);

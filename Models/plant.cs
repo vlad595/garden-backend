@@ -25,9 +25,10 @@ namespace Models
             
         }
 
-        public FruitTree(string name, string species, DateTime plantedAt, double height, int UserId)
+        public FruitTree(string name, string species, DateTime plantedAt, double height, int UserId, PlantStatus status)
         {
             this.Name = name;
+            this.Status = status;
             this.Species = species;
             this.PlantedAt = plantedAt;
             this.Height = height;
@@ -38,9 +39,10 @@ namespace Models
 
     public class BerryBush : Plant
     {
-        public BerryBush(string name, string species, DateTime plantedAt, bool trellisNeeds, int UserId)
+        public BerryBush(string name, string species, DateTime plantedAt, bool trellisNeeds, int UserId, PlantStatus status)
         {
             this.Name = name;
+            this.Status = status;
             this.Species = species;
             this.PlantedAt = plantedAt;
             this.TrellisNeeds = trellisNeeds;

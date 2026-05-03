@@ -28,7 +28,7 @@ namespace Controllers
             if (harvestsList == null) return NotFound("Harvests does does not found");
             return Ok(harvestsList);
         }
-
+    
         [HttpPost]
         public async Task<ActionResult<HarvestResponse>> AddHarvestToPlant(HarvestCreate harvest)
         {
