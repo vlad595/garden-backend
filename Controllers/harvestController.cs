@@ -31,7 +31,7 @@ namespace Controllers
                 return Unauthorized("User Id is not correct");
             }
 
-            var harvestList = await _db.Harvests.ToListAsync();
+            var harvestList = await _db.Harvests.Where(h => h.Plant.UserId == userId).ToListAsync();
             return Ok(harvestList);
         }
 

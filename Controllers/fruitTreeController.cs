@@ -37,7 +37,19 @@ namespace Controllers
         [HttpGet("{Id}")]
         public async Task<ActionResult<FruitTree>> GetTreeById(int Id)
         {
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized("User Id is not correct");
+            }
+
             FruitTree tree = _db.FruitTrees.Find(Id);
+            if (tree.UserId != userId)
+            {
+                return Forbid("Not yours");
+            }
+            tree.Harvests = _db.Harvests.Where(t => t.PlantId == tree.Id).ToList();
 
             return Ok(tree);
         }

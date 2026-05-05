@@ -1,10 +1,12 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace Models
 {
     public class Harvest : BaseEntity
     {
         public int PlantId { get; set; }
+        [JsonIgnore]
         public Plant Plant { get; set; } = null!;
         public double WeightKg { get; set; }
         public DateTime HarvestDate { get; set; }

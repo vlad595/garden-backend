@@ -38,7 +38,20 @@ namespace Controllers
         [HttpGet("{Id}")]
         public async Task<ActionResult<BerryBush>> GetBerryBush(int Id)
         {
+            string userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized("User Id is not correct");
+            }
+
             BerryBush bush = _db.BerryBushes.Find(Id);
+            if (bush.UserId != userId)
+            {
+                return Forbid("Not yours");
+            }
+            
+            bush.Harvests = _db.Harvests.Where(h => h.PlantId == bush.Id).ToList();
             if (bush != null) {
                 return Ok(bush);
             }
