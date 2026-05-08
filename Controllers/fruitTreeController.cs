@@ -45,7 +45,7 @@ namespace Controllers
             }
 
             FruitTree tree = _db.FruitTrees.Find(Id);
-            if (tree.UserId != userId)
+            if (tree.UserId !=  userId)
             {
                 return Forbid("Not yours");
             }
