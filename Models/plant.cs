@@ -11,6 +11,8 @@ namespace Models
         public PlantStatus Status { get; set; }
         public DateTime PlantedAt { get; set; }
 
+        public string? ImageUrl { get; set; }
+
         public int UserId {get;set;}
         public User User {get;set;} = null!;
 
