@@ -10,7 +10,13 @@ namespace Models
         public int Age {get; set;}
         public PlantStatus Status { get; set; }
         public DateTime PlantedAt { get; set; }
-        public List<Harvest> harvests { get; set; } = new List<Harvest>();
+
+        public string? ImageUrl { get; set; }
+
+        public int UserId {get;set;}
+        public User User {get;set;} = null!;
+
+        public List<Harvest> Harvests { get; set; } = new List<Harvest>();
     }
 
     public class FruitTree : Plant
@@ -21,24 +27,28 @@ namespace Models
             
         }
 
-        public FruitTree(string name, string species, DateTime plantedAt, double height)
+        public FruitTree(string name, string species, DateTime plantedAt, double height, int UserId, PlantStatus status)
         {
             this.Name = name;
+            this.Status = status;
             this.Species = species;
             this.PlantedAt = plantedAt;
             this.Height = height;
+            this.UserId = UserId;
         }
         public double Height { get; set; }
     }
 
     public class BerryBush : Plant
     {
-        public BerryBush(string name, string species, DateTime plantedAt, bool trellisNeeds)
+        public BerryBush(string name, string species, DateTime plantedAt, bool trellisNeeds, int UserId, PlantStatus status)
         {
             this.Name = name;
+            this.Status = status;
             this.Species = species;
             this.PlantedAt = plantedAt;
             this.TrellisNeeds = trellisNeeds;
+            this.UserId = UserId;
         }
         public bool TrellisNeeds {get; set;}
     }
